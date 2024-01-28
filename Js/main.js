@@ -1,11 +1,13 @@
 /// <reference types="../@types/jquery" />
-$(function(){
-  $(".loader").fadeOut(1000,function(){
-    $(".loading-screen").slideUp(1000,function(){
-      $("body").css("overflow", "auto")
-    });
-  })
-})
+$(document).ready(
+  function(){
+    $(".loader").fadeOut(1000,function(){
+      $(".loading-screen").slideUp(1000,function(){
+        $("body").css("overflow", "auto")
+      });
+    })
+  }
+);
 $('#nav').hide();
 $('#icon').on('click',function(){
     if($('#nav').css('display') == 'none'){
@@ -47,6 +49,7 @@ async function displayData(){
     }
 }
 displayData()
+
 //display Ingredient
 async function displayIngredient(name){
     finalName=name.trim();
@@ -55,11 +58,12 @@ async function displayIngredient(name){
      let response=await fetch (`https://www.themealdb.com/api/json/v1/1/search.php?s=${finalName}`); 
       if(response.status==200){
         let final = await response.json();
-         for(let i=1;i<=final.meals.length;i++){
-              if(final.meals[0][`strIngredient${i}`].trim().length !==0 || final.meals[0][`strIngredient${i}`]===null){
+         for(let i=1;i<=20;i++){
+              if(final.meals[0][`strIngredient${i}`].trim().length!==0 || final.meals[0][`strIngredient${i}`]===null){
                 ingredients+=`<li class="m-2 p-1">${final.meals[0][`strIngredient${i}`]}</li>`
               } 
          }
+         console.log(ingredients);
         let tags = final.meals[0].strTags?.split(",");
         if (!tags) tags = [];
          let tagsStr = '';
@@ -112,7 +116,7 @@ $('#search').on('click',function(){
   $('#name').val('');
   $('#letter').val('');
   $('#form').addClass("d-none");
-  $('#nav').animate({width:'toggle', paddingInline:'toggle'},1000);
+  $('#nav').animate({width:'toggle', paddingInline:'toggle'},500);
   $("#icon").addClass("fa-align-justify");
   $("#icon").removeClass("fa-x");
 })
@@ -170,16 +174,20 @@ $('#letter').keyup(async function(){
 });
 
 //categories
-$('#categories').on('click',async function(){
+$('#categories').on('click',async function(){    
+  let xx=`<div class="inner-loading-screen">
+          <span class="loader"></span>
+          </div>`; 
+        $("#dataRow").html(xx);
+        $('.loader').fadeOut(1000, function(){
+        $('.inner-loading-screen').slideUp(1000,function(){
+            $('body').css('overflow','auto');
+          });
+      });
   let cols=``;
-  let xx=`<div class="loading-screen">
-  <span class="loader"></span>
-</div>`;
   let response=await fetch (`https://www.themealdb.com/api/json/v1/1/categories.php`); 
     if(response.status==200){
-      $("#dataRow").html(xx);
-       $('.loading-screen').fadeIn(1000,function(){});
-      let final = await response.json();
+        let final = await response.json();
       for(let i=0; i<final.categories.length;i++){
         //console.log(final.categories[i].strCategory.split(" ").slice(0,20).join(" "));
        cols+=`
@@ -193,12 +201,11 @@ $('#categories').on('click',async function(){
       </div> 
       </div>
       `}
-       $("#dataRow").html(xx);
-       $('.loading-screen').fadeOut(1000);
-         $('#dataRow').html(cols)  
-       $('#data').addClass("d-none");
+
+    $('#dataRow').html(cols)  
+    $('#data').addClass("d-none");
      $('#form').addClass("d-none");
-     $('#nav').animate({width:'toggle', paddingInline:'toggle'},1000);
+     $('#nav').animate({width:'toggle', paddingInline:'toggle'},500);
      $("#icon").addClass("fa-align-justify");
      $("#icon").removeClass("fa-x");
       //console.log(final);
@@ -239,16 +246,20 @@ async function displayDeepCategories(category){
 
 //areas
 $('#area').on('click',async function(){
+  let xx=`<div class="inner-loading-screen">
+          <span class="loader"></span>
+          </div>`; 
+  $("#dataRow").html(xx);
+  $('.loader').fadeOut(1000, function(){
+  $('.inner-loading-screen').slideUp(1000,function(){
+  $('body').css('overflow','auto');
+      });
+  });  
   let cols=``;
   let txt=[];
-  let xx=`<div class="loading-screen">
-  <span class="loader"></span>
-</div>`;
   let response=await fetch (`https://www.themealdb.com/api/json/v1/1/list.php?a=list`); 
     if(response.status==200){
-      $("#dataRow").html(xx);
-      $('.loading-screen').fadeIn(1000,function(){});
-      let final = await response.json();
+    let final = await response.json();
     //  console.log(final);
       for(let i=0; i<final.meals.length;i++){
         //console.log(final.categories[i].strCategory.split(" ").slice(0,20).join(" "));
@@ -258,12 +269,10 @@ $('#area').on('click',async function(){
       <p>${final.meals[i].strArea}</p>
       </div>
       `}
-      $("#dataRow").html(xx);
-      $('.loading-screen').fadeOut(1000);
      $('#dataRow').html(cols)
      $('#data').addClass("d-none");
      $('#form').addClass("d-none");
-     $('#nav').animate({width:'toggle', paddingInline:'toggle'},1000);
+     $('#nav').animate({width:'toggle', paddingInline:'toggle'},500);
      $("#icon").addClass("fa-align-justify");
      $("#icon").removeClass("fa-x");
      let clickedCard = $(".Imgs");
@@ -306,15 +315,19 @@ async function displayAreasMeals(area){
 
 //ingredients
 $('#ingredients').on('click',async function(){
-  let cols=``;
-  let xx=`<div class="loading-screen">
+  let xx=`<div class="inner-loading-screen">
   <span class="loader"></span>
-</div>`;
+  </div>`; 
+$("#dataRow").html(xx);
+$('.loader').fadeOut(1000, function(){
+$('.inner-loading-screen').slideUp(1000,function(){
+    $('body').css('overflow','auto');
+    });
+});
+  let cols=``;
   let response=await fetch (`https://www.themealdb.com/api/json/v1/1/list.php?i=list`); 
     if(response.status==200){
-      $("#dataRow").html(xx);
-      $('.loading-screen').fadeIn(1000,function(){});
-      let final = await response.json();
+        let final = await response.json();
      // console.log(final);
       for(let i=0; i<20;i++){
          cols+=`
@@ -325,12 +338,10 @@ $('#ingredients').on('click',async function(){
       </div>
       `}
 
-      $("#dataRow").html(xx);
-      $('.loading-screen').fadeOut(1000);
       $('#dataRow').html(cols)
       $('#data').addClass("d-none");
       $('#form').addClass("d-none");
-      $('#nav').animate({width:'toggle', paddingInline:'toggle'},1000);
+      $('#nav').animate({width:'toggle', paddingInline:'toggle'},500);
       $("#icon").addClass("fa-align-justify");
       $("#icon").removeClass("fa-x");
      
