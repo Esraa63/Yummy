@@ -39,14 +39,13 @@ ul {
      top: 0;
 }
 #form input{
-    background-color: transparent;
-  
+    background-color: transparent; 
 }
 #dataRow{
     /* overflow: hidden; */
 }
-#dataRow input::placeholder{
-    color: #fff;
+#form input::placeholder{
+    color: #fff !important;
 }
 .Imgs{
     cursor: pointer;

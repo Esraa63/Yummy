@@ -194,9 +194,8 @@ $('#categories').on('click',async function(){
       </div>
       `}
        $("#dataRow").html(xx);
-         $('.loading-screen').fadeOut(1000);
-      // $(".inner-loading-screen").fadeOut(3000)
-       $('#dataRow').html(cols)  
+       $('.loading-screen').fadeOut(1000);
+         $('#dataRow').html(cols)  
        $('#data').addClass("d-none");
      $('#form').addClass("d-none");
      $('#nav').animate({width:'toggle', paddingInline:'toggle'},1000);
